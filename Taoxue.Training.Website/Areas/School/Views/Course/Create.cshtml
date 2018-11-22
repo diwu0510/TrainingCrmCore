@@ -1,0 +1,60 @@
+﻿@model Taoxue.Training.Services.CourseEntity
+
+@{
+    ViewData["Title"] = "创建课程";
+}
+
+<form asp-action="Create">
+    <h1 class="form-box-title">@ViewData["Title"]</h1>
+    <hr />
+    <div class="form-box-fixed-container">
+        <div class="form-box">
+            <div class="row">
+                <div class="col-12">
+                    <div class="label">课程名称</div>
+                    <div class="control">
+                        <input type="text" asp-for="Name" isvalid="yes" checkexpession="NotNull" />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="label">课程单价</div>
+                    <div class="control">
+                        <input type="number" asp-for="UnitPrice" isvalid="yes" checkexpession="Number" />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="label">备注</div>
+                    <div class="control">
+                        <textarea type="text" asp-for="Remark"></textarea>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="label">是否有效</div>
+                    <div class="control">
+                        <label>
+                            <input type="checkbox" asp-for="Enabled" isvalid="yes" checkexpession="NotNull" />
+                            有效
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-box-fixed-foot row">
+        <div class="col-6">
+            <label>&nbsp;</label>
+        </div>
+        <div class="col-6 content-right">
+            <input type="submit" value="提交" class="btn btn-blue" />
+            <input id="btn-closeSelf" type="button" value="关闭" class="btn btn-red btn-close" />
+        </div>
+    </div>
+</form>
+
+@section scripts {
+    <script src="~/lib/validator/validator.js"></script>
+    <script>
+        myUI.initForm({pageType: "pop"});
+    </script>
+}

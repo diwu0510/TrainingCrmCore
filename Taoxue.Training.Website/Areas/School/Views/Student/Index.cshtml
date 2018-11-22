@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Student管理";
+}
+
+<div class="container-fluid full-height">
+    <div id="container-header">
+        <form id="form" onsubmit="return false;">
+            <div class="toolbar row">
+                <div class="col-6">
+                    <a id="btn-create"
+                       href="javascript:;"
+                       data-action="/School/Student/Create"
+                       data-type="pop"
+                       data-options='{"title": "创建", "width": 720, "height": 400, "before": null}'
+                       class="btn btn-green btn-customer"><i class="fa fa-plus-square"></i> 添加</a>
+                    <a id="btn-edit"
+                       href="javascript:;"
+                       data-action="/School/Student/Edit"
+                       data-type="pop"
+                       data-grid="grid"
+                       data-options='{"title": "修改", "width": 720, "height": 400, "before": null}'
+                       class="btn btn-blue btn-customer"><i class="fa fa-pencil-square"></i> 修改</a>
+                    <a id="btn-delete"
+                       href="javascript:;"
+                       data-action="/School/Student/Delete"
+                       data-type="ajax"
+                       data-grid="grid"
+                       data-options='{"msg": "确认操作？", "before": null}'
+                       class="btn btn-red btn-customer"><i class="fa fa-trash-o"></i> 删除</a>
+                    <a id="btn-refresh" href="javascript:;" class="btn btn-default" onclick="window.grid.reload();"><i class="fa fa-refresh"></i> 刷新</a>
+                </div>
+                <div class="col-6 content-right">
+                    @Html.AntiForgeryToken()
+                    <input name="Key" type="search" value="" placeholder="关键字" />
+                    <input type="button" class="btn btn-blue" value="搜索" onclick="window.grid.reload()">
+                    <a href="javascript:;" class="btn btn-default search-toggle-button"><i class="fa fa-filter"></i> 高级筛选</a>
+                </div>
+            </div>
+            <div id="search-box" class="search-box">
+                <div class="caret-h"></div>
+                <div class="search-box-body form-box">
+                    <div class="row">
+                        <div class="col-4 form-box-cell">
+                            <div class="label">学生姓名</div>
+                            <div class="control"><input type="text" name="Name" /></div>
+                        </div>
+                        <div class="col-4 form-box-cell">
+                            <div class="label">学生卡</div>
+                            <div class="control"><input type="text" name="Card" /></div>
+                        </div>
+                        <div class="col-4 form-box-cell">
+                            <div class="label">关联销售</div>
+                            <div class="control">
+                                <select name="SalerId" asp-items="ViewBag.Salers">
+                                    <option value="">关联销售</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4 form-box-cell">
+                            <div class="label">手机号码</div>
+                            <div class="control"><input type="text" name="Mobile" /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="list" class="grid-box"></div>
+</div>
+
+@section scripts
+{
+    <script src="~/lib/myui/myGridNoFixed.v2.js"></script>
+    <script>
+        var grid = $('#list').MyGrid({
+            api: '/School/Student/Get',
+            columns: [
+                { title: '编号', type: 'indexNum', width: 40 },
+                { title: '学生姓名', field: 'name', width: 120 },
+                { title: '学生卡', field: 'card', width: 120 },
+                { title: '学生状态', field: 'status', width: 120 },
+                { title: '手机号码', field: 'mobile', width: 120 },
+                { title: '微信OPENID', field: 'weixin', width: 120 },
+            ],
+            keyColumn: 'id',
+            height: function() {
+                var h = $(window).height() - $('#container-header').height() - 40;
+                return h;
+            },
+            pageSize: 20,
+            dataConvertFn: function(source) { return source; },
+            renderCompleteFn: null,
+            filterFn: function() { return $('#form').serialize(); },
+            ajaxErrorFn: null,
+            ajaxBeforeSendFn: null,
+            click: function(item) { },
+            dblClick: function(item) { $('#btn-edit').trigger('click'); },
+            multi: false,
+            pager: true,
+            auto: true
+        });
+    </script>
+}
+

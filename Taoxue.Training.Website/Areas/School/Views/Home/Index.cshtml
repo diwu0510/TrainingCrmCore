@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+    ViewBag.title = "怡和微信平台";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@ViewBag.title</title>
+    <link href="~/css/myui.css" rel="stylesheet" />
+    <link href="~/css/admin.css" rel="stylesheet">
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="north row">
+        <div class="col-4">
+            <a href="/Admin/Home"><h2 class="site-logo" id="logo">@ViewBag.title</h2></a>
+        </div>
+        <div class="col-8 content-right account-holder">
+            <span class="account">
+                <i class="fa fa-user-circle"></i>
+                [@ViewBag.Role] @User.Identity.Name
+                <a id="btn-changePw" href="javascript:;" style="color: #ff9">修改密码</a>
+            </span>
+            <a href="javascript:;" onclick="logout" id="btn-logout" class="exit" title="安全退出">
+                <i class="fa fa-power-off"></i>
+            </a>
+        </div>
+    </div>
+    <div class="west">
+        <div class="west-scroll">
+            <ul id="nav"></ul>
+        </div>
+    </div>
+    <div class="crumbs">
+        <div class="crumbs-tabs">
+            <div class="crumbs-button crumbs-prev" onclick="tabs.scrollL()"><i class="fa fa-chevron-left"></i></div>
+            <div class="crumbs-button crumbs-next" onclick="tabs.scrollR()"><i class="fa fa-chevron-right"></i></div>
+            <div class="crumbs-button crumbs-more">
+                <a href="javascript:;" class="btn-dropdown">
+                    <i class="fa fa-chevron-down"></i>
+                </a>
+                <dl class="dropdown-children dd-more">
+                    <dd><a href="javascript:;" onclick="tabs.closeCurrent()">关闭当前标签</a></dd>
+                    <dd><a href="javascript:;" onclick="tabs.closeOthers()">关闭其他标签</a></dd>
+                    <dd><a href="javascript:;" onclick="tabs.closeAll()">关闭所有标签</a></dd>
+                </dl>
+            </div>
+            <div class="tabs" id="homeTab">
+                <ul class="home-tabs">
+                    <li class="nav-home active">
+                        <span><i class="fa fa-home"></i></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="east" id="east">
+        <div>
+            <iframe src="/Manage/Home/UserHome" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/layer/layer.js"></script>
+    <script src="~/lib/myui/myHomeTab.js"></script>
+    <script src="~/lib/myui/myui.v2.js"></script>
+    <script src="~/js/manage/home.js"></script>
+</body>
+</html>

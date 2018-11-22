@@ -1,0 +1,77 @@
+﻿@model Taoxue.Training.Services.StudentEntity
+
+@{
+    ViewData["Title"] = "Student创建";
+}
+
+<form asp-action="Create">
+    <h1 class="form-box-title">@ViewData["Title"]</h1>
+    <hr />
+    <div class="form-box-fixed-container">
+        <div class="form-box">
+            <div class="row">
+                <div class="col-6">
+                    <div class="label">学生姓名</div>
+                    <div class="control">
+                        <input type="text" asp-for="Name" isvalid="yes" checkexpession="NotNull" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">学生昵称</div>
+                    <div class="control">
+                        <input type="text" asp-for="NickName" isvalid="yes" checkexpession="NotNull" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">学生卡</div>
+                    <div class="control">
+                        <input type="text" asp-for="Card" isvalid="yes" checkexpession="NotNull" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">关联销售</div>
+                    <div class="control">
+                        <select asp-for="SalerId" asp-items="ViewBag.Salers" isvalid="yes" checkexpession="NotNull">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">学生状态</div>
+                    <div class="control">
+                        <input type="number" asp-for="Status" isvalid="yes" checkexpession="Number" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">手机号码</div>
+                    <div class="control">
+                        <input type="text" asp-for="Mobile" isvalid="yes" checkexpession="NotNull" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">微信OPENID</div>
+                    <div class="control">
+                        <input type="text" asp-for="Weixin" isvalid="yes" checkexpession="NotNull" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-box-fixed-foot row">
+        <div class="col-6">
+            <label>&nbsp;</label>
+        </div>
+        <div class="col-6 content-right">
+            <input type="submit" value="提交" class="btn btn-blue" />
+            <input id="btn-closeSelf" type="button" value="关闭" class="btn btn-red btn-close" />
+        </div>
+    </div>
+</form>
+
+@section scripts {
+    <script src="~/lib/validator/validator.js"></script>
+    <script>
+        myUI.initForm({pageType: "pop"});
+    </script>
+}

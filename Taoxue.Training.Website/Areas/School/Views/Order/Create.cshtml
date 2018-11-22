@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container-980" style="padding: 10px 0;" id="app">
+    <h1 class="page-title">创建订单</h1>
+    <hr />
+    @Html.AntiForgeryToken()
+    <div>
+        <div class="form-box">
+            <div class="row">
+                <div class="col-4">
+                    <div class="label"><span class="font-red">*</span> 选择学生</div>
+                    <div class="control">
+                        <input type="text" value="" v-model="order.studentName" readonly="readonly" isvalid="true" checkexpession="NotNull" />
+                        <span class="btn-inline" id="customer_select_btn" v-on:click="showCustomerPopWindow">...</span>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="label"><span class="font-red">*</span> 关联销售</div>
+                    <div class="control">
+                        <select>
+                            <option value="value">text</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="label">订单项目</div>
+                <div class="control">
+                    <input type="button" value="添加产品" class="btn btn-green" v-on:click="showProductPopWindow(-1)" />
+                    <div class="blank-10"></div>
+                    <div>
+                        <table class="table table-bordered table-editable table-striped table-hover" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30px;" class="content-center"></th>
+                                    <th>购买物品</th>
+                                    <th style="width: 80px;">原价</th>
+                                    <th style="width: 80px;">成交单价</th>
+                                    <th style="width: 80px;">数量</th>
+                                    <th style="width: 80px;">成交价</th>
+                                    <th style="width: 46px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-show="items.length == 0">
+                                    <td colspan="7" class="empty">暂无数据</td>
+                                </tr>
+                                <tr v-for="(item, idx) in items">
+                                    <td class="content-center">{{idx + 1}}</td>
+                                    <td>
+                                        <input type="text" v-model="item.goodsName" value="" readonly="readonly" v-on:click="showProductPopWindow(idx)" />
+                                    </td>
+                                    <td><input type="number" v-model="item.originUnitPrice" readonly="readonly" value="" v-on:change="sumItemAmount(item, idx)" /></td>
+                                    <td><input type="number" v-model="item.closingUnitPrice" readonly="readonly" value="" /></td>
+                                    <td><input type="number" v-model="item.goodsCount" value="" v-on:change="sumItemAmount(item, idx)" /></td>
+                                    <td><input type="number" v-model="item.closingCost" readonly="readonly" value="" /></td>
+                                    <td class="content-center">
+                                        <input type="button" class="btn btn-xs btn-red" value="删除" v-on:click="deleteItem(idx)" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="label">订单总额</div>
+                    <div class="control">
+                        <input type="number" v-model.number="order.orderTotal" value="" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="label"><span class="font-red">*</span> 折扣</div>
+                    <div class="control">
+                        <input type="number" v-model.date="order.discount" value="" min="1" max="100" />
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="label"><span class="font-red">*</span> 优惠券</div>
+                    <div class="control">
+                        <input type="number" v-model.date="order.coupon" value="" min="0" />
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="label"><span class="font-red">*</span> 成交金额</div>
+                    <div class="control">
+                        <input type="number" v-model.date="order.closingCost" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="label">备注</div>
+                <div class="control">
+                    <textarea v-model="order.remark" style="height: 80px;"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row" style="padding: 10px; text-align:center;">
+        <input id="btn_last" type="button" class="btn btn-blue" value="提交订单" v-on:click="save" />
+        <input id="btn_last" type="button" class="btn btn-red" value="取消" onclick="top.tabs.CloseCurrent('创建订单')" />
+    </div>
+</div>
+
+<div id="goods">
+    <div class="grid-box">
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/lodash/lodash.js"></script>
+    <script>
+        //$('#btn-submit').on('click', function () {
+        //    var order = {
+        //        studentId: 1,
+        //        studentName: '测试学生',
+        //        salerId: 1,
+        //        orderType: 1,
+        //        discount: 100,
+        //        coupon: 0,
+        //        balance: 0,
+        //        closingCost: 1000,
+        //        actualPayment: 1000,
+        //        paymentMethod: '现金',
+        //        remark: '',
+        //        details: [
+        //            {
+        //                goodsType: 1,
+        //                goodsId: 1,
+        //                goodsName: '早教',
+        //                goodsCount: 10,
+        //                originUnitPrice: 100,
+        //                closingUnitPrice: 100,
+        //                remark: ''
+        //            }
+        //        ]
+        //    };
+
+        //    $.post('/School/Order/Create', { order: order }, function (response) {
+        //        console.log(response);
+        //    })
+        //});
+        // 订单明细
+        var app = new Vue({
+            el: "#app",
+            data: {
+                student: null,
+                saler: null,
+                coupons: 0,
+                discount: 0,
+                details: []
+            },
+            computed: {
+                orderTotal: function () {
+                    return _.sumBy(this.details, function (d) { return d.originTotal });
+                },
+                closingCost: function () {
+                    return _.sumBy(this.details, function (d) { return d.closingCost });
+                }
+            },
+    </script>    
+}
